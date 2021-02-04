@@ -6,13 +6,16 @@ import androidx.room.Room
 import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
 import androidx.sqlite.db.SupportSQLiteDatabase
+import androidx.work.OneTimeWorkRequestBuilder
+import androidx.work.WorkManager
 import com.wjploop.life.data.db.converter.Converters
 import com.wjploop.life.data.db.dao.CategoryDao
 import com.wjploop.life.data.db.dao.TaskDao
 import com.wjploop.life.data.db.entity.Category
 import com.wjploop.life.data.db.entity.Task
+import com.wjploop.life.worker.InitDatabaseWorker
 
-@Database(entities = [Task::class, Category::class], version = 1, exportSchema = true)
+@Database(entities = [Task::class, Category::class], version = 1, exportSchema = false)
 @TypeConverters(Converters::class)
 abstract class LifeDatabase : RoomDatabase() {
 
@@ -35,7 +38,9 @@ abstract class LifeDatabase : RoomDatabase() {
                 .addCallback(object : Callback() {
                     override fun onCreate(db: SupportSQLiteDatabase) {
                         super.onCreate(db)
-
+                        OneTimeWorkRequestBuilder<InitDatabaseWorker>().build().let {
+                            WorkManager.getInstance(context).enqueue(it)
+                        }
                     }
                 }).build()
 

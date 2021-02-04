@@ -19,7 +19,8 @@ data class Task(
     val category: String,
     val title: String,
     @PrimaryKey(autoGenerate = true)
-    val id: Int = 0,    // 作为主键插入时，若是0，则数据库为其生成一个Id，并在insert方法中作为返回值
+    val id: Long = 0,    // 作为主键插入时，若是0，则数据库为其生成一个Id，并在insert方法中作为返回值
+    val content: String = "",
     val created: Calendar = Calendar.getInstance(),
     @IntRange(from = 1, to = 100)
     val scored: Int = 1, //  奖励几朵小红花

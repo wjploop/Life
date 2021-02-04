@@ -3,11 +3,17 @@ package com.wjploop.life.ui.home
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.asLiveData
+import com.wjploop.life.data.db.entity.Task
+import com.wjploop.life.data.repository.TaskRepo
 
 class HomeViewModel : ViewModel() {
 
-    private val _text = MutableLiveData<String>().apply {
-        value = "This is home Fragment"
+    val repo: TaskRepo by lazy {
+        TaskRepo()
     }
-    val text: LiveData<String> = _text
+
+    val tasks = repo.list().asLiveData()
+
+
 }
