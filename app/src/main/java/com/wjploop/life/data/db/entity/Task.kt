@@ -1,10 +1,7 @@
 package com.wjploop.life.data.db.entity
 
 import androidx.annotation.IntRange
-import androidx.room.Entity
-import androidx.room.ForeignKey
-import androidx.room.Index
-import androidx.room.PrimaryKey
+import androidx.room.*
 import java.text.DateFormat
 import java.util.Calendar
 
@@ -16,7 +13,8 @@ import java.util.Calendar
     indices = [Index("category")]
 )
 data class Task(
-    val category: String,
+    @ColumnInfo(defaultValue = "Default")
+    val category: String = "Default",
     val title: String,
     @PrimaryKey(autoGenerate = true)
     val id: Long = 0,    // 作为主键插入时，若是0，则数据库为其生成一个Id，并在insert方法中作为返回值

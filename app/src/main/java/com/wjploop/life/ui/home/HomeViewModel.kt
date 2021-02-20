@@ -15,5 +15,10 @@ class HomeViewModel : ViewModel() {
 
     val tasks = repo.list().asLiveData()
 
+    var showInput = MutableLiveData(false)
+
+    fun toggleInput() {
+        showInput.value = !showInput.value!!
+    }
 
 }

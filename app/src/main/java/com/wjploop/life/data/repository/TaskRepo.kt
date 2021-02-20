@@ -2,6 +2,7 @@ package com.wjploop.life.data.repository
 
 import com.wjploop.life.App
 import com.wjploop.life.data.db.dao.TaskDao
+import com.wjploop.life.data.db.entity.Task
 
 /**
  *  为什么需要加这么一层Repo呢？
@@ -21,5 +22,8 @@ class TaskRepo constructor() {
 
     fun listByCategory(categoryName: String) = taskDao.listByCategory(categoryName)
 
+    suspend fun addTask(task: Task) {
+        taskDao.insert(task)
+    }
 
 }

@@ -23,6 +23,6 @@ interface TaskDao {
     fun deleteById(taskId: Long)
 
     @Insert(onConflict = OnConflictStrategy.ABORT)
-    fun insert(task: Task): Long
+    suspend fun insert(task: Task): Long
 
 }

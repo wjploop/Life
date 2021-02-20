@@ -14,7 +14,7 @@ class InitDatabaseWorker(
 ) : CoroutineWorker(context, workerParameters) {
 
     private val initCategory = listOf(
-        "Life", "Work", "Play"
+        "Default", "Life", "Work", "Play"
     ).map { Category(it) }
     private val initTask = listOf(
         Task(category = initCategory[0].name, title = "早睡，12点钱入睡"),
