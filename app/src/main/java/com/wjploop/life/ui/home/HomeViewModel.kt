@@ -1,10 +1,7 @@
 package com.wjploop.life.ui.home
 
-import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.asLiveData
-import com.wjploop.life.data.db.entity.Task
 import com.wjploop.life.data.repository.TaskRepo
 
 class HomeViewModel : ViewModel() {
@@ -13,12 +10,14 @@ class HomeViewModel : ViewModel() {
         TaskRepo()
     }
 
-    val tasks = repo.list().asLiveData()
+    val tasks = repo.tasks()
 
     var showInput = MutableLiveData(false)
 
     fun toggleInput() {
         showInput.value = !showInput.value!!
     }
+
+
 
 }

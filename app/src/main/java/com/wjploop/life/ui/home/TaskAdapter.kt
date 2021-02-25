@@ -1,110 +1,76 @@
 package com.wjploop.life.ui.home
 
-import android.annotation.SuppressLint
-import android.graphics.Canvas
-import android.graphics.Color
-import android.graphics.Paint
-import android.graphics.Rect
+import android.app.Activity
+import android.app.ActivityOptions
+import android.content.Intent
+import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
-import android.view.MotionEvent
+import android.view.View
 import android.view.ViewGroup
-import androidx.core.content.ContextCompat
-import androidx.core.graphics.drawable.toBitmap
+import android.widget.ImageView
+import android.widget.TextView
+import androidx.core.os.bundleOf
+import androidx.core.view.isVisible
+import androidx.navigation.findNavController
 import androidx.recyclerview.widget.*
-import com.chad.library.adapter.base.BaseQuickAdapter
-import com.chad.library.adapter.base.diff.BrvahAsyncDifferConfig
-import com.chad.library.adapter.base.listener.OnItemSwipeListener
-import com.chad.library.adapter.base.module.BaseDraggableModule
-import com.chad.library.adapter.base.module.DraggableModule
-import com.chad.library.adapter.base.viewholder.BaseViewHolder
 import com.wjploop.life.R
 import com.wjploop.life.data.db.entity.Task
-import com.wjploop.life.databinding.ItemTaskBinding
 
-class TaskAdapter() :
-    BaseQuickAdapter<Task, BaseViewHolder>(R.layout.item_task) {
-    init {
-        setDiffCallback(diffCallback = object : DiffUtil.ItemCallback<Task>() {
-            override fun areItemsTheSame(oldItem: Task, newItem: Task): Boolean {
-                return oldItem.id == oldItem.id
-            }
+class TaskAdapter :
+    ListAdapter<Task, TaskAdapter.ViewHolder>(object : DiffUtil.ItemCallback<Task?>() {
+        override fun areItemsTheSame(oldItem: Task, newItem: Task): Boolean {
+            Log.d("wolf", "check item same ${oldItem == newItem}")
+            return oldItem.id == newItem.id
+        }
 
-            override fun areContentsTheSame(oldItem: Task, newItem: Task): Boolean {
-                return oldItem == newItem
-            }
-        })
+        override fun areContentsTheSame(oldItem: Task, newItem: Task): Boolean {
+            val same = oldItem.isComplete == newItem.isComplete
+                    && oldItem.title == oldItem.title
+                    && oldItem.category == newItem.category
+            Log.d("wolf", "check content same ${same}")
+            return same;
+        }
+    }) {
 
-//
-//        draggableModule.isSwipeEnabled = true
-//        draggableModule.itemTouchHelperCallback.setSwipeMoveFlags(ItemTouchHelper.START or ItemTouchHelper.END)
-//        draggableModule.setOnItemSwipeListener(object : OnItemSwipeListener {
-//
-//            val deleteDrawable by lazy {
-//                ContextCompat.getDrawable(context, R.drawable.ic_baseline_delete_24)
-//            }
-//            val doneDrawable by
-//            lazy { ContextCompat.getDrawable(context, R.drawable.ic_baseline_done_24) }
-//
-//            val deleteText = "delete"
-//            val doneText = "done"
-//
-//            val textPaint = Paint().apply {
-//                color = Color.WHITE
-//                isAntiAlias = true
-//                isElegantTextHeight = true
-//            }
-//
-//
-//            override fun onItemSwipeStart(viewHolder: RecyclerView.ViewHolder?, pos: Int) {
-//
-//            }
-//
-//            override fun clearView(viewHolder: RecyclerView.ViewHolder?, pos: Int) {
-//
-//            }
-//
-//            override fun onItemSwiped(viewHolder: RecyclerView.ViewHolder?, pos: Int) {
-//
-//            }
-//
-//            override fun onItemSwipeMoving(
-//                canvas: Canvas,
-//                viewHolder: RecyclerView.ViewHolder,
-//                dX: Float,
-//                dY: Float,
-//                isCurrentlyActive: Boolean
-//            ) {
-//                if (dX > 0) {
-//                    canvas.drawColor(Color.BLUE)
-//                    canvas.drawBitmap(
-//                        doneDrawable!!.toBitmap(60, 60),
-//                        60f,
-//                        (viewHolder.itemView.height - 60f) / 2f,
-////                        0f,
-//                        textPaint
-//                    )
-//                    val textBounds = Rect()
-//                    textPaint.getTextBounds(doneText, 0, doneText.length, textBounds)
-//                    canvas.drawText(
-//                        doneText,
-//                        120 + 30f,
-//                        (viewHolder.itemView.height) / 2f - textBounds.exactCenterY(),
-//                        textPaint
-//                    )
-////                    canvas.drawText(doneText, 60f, 40f, textPaint)
-//
-//                } else {
-//                    canvas.drawColor(Color.RED)
-//                    canvas.drawText("删除", 0f, 0f, Paint())
-//                }
-//
-//            }
-//        })
+    var hasHeader = currentList.firstOrNull { it.isComplete } != null
+
+
+    inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+        val tvCategory = itemView.findViewById<TextView>(R.id.tv_category)
+        val tvTitle = itemView.findViewById<TextView>(R.id.tv_title)
+        val ivDone = itemView.findViewById<ImageView>(R.id.iv_done)
+
+        fun bind(task: Task) {
+            tvTitle.text = task.title
+            tvCategory.text = task.category
+            ivDone.isVisible = task.isComplete
+        }
     }
 
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
+        val itemView = LayoutInflater.from(parent.context).inflate(R.layout.item_task, parent, false)
+        return ViewHolder(itemView)
+    }
 
-    override fun convert(holder: BaseViewHolder, item: Task) {
-        holder.setText(R.id.tv_category, item.category)
-        holder.setText(R.id.tv_title, item.title)
+    override fun onBindViewHolder(holder: ViewHolder, position: Int, payloads: MutableList<Any>) {
+
+        super.onBindViewHolder(holder, position, payloads)
+    }
+
+    override fun onBindViewHolder(holder: ViewHolder, position: Int) {
+        val item = currentList[position]
+
+        holder.bind(currentList[position])
+
+        holder.itemView.setOnClickListener {
+
+            holder.itemView.findNavController().navigate(R.id.graph_edit_task, bundleOf("taskId" to item.id))
+            Log.d("wolf", "onClick on $position")
+        }
+    }
+
+    override fun getItemCount(): Int {
+        return currentList.size
     }
 }

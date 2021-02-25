@@ -1,5 +1,6 @@
 package com.wjploop.life.data.db.dao
 
+import androidx.lifecycle.LiveData
 import androidx.room.*
 import com.wjploop.life.data.db.entity.Category
 import com.wjploop.life.data.db.entity.Task
@@ -22,7 +23,7 @@ interface CategoryDao {
     fun update(category: Category)
 
     @Query("select * from category_table")
-    fun list(): Flow<List<Category>>
+    fun list(): LiveData<List<Category>>
 
 
 }

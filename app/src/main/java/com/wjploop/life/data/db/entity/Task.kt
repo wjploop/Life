@@ -14,18 +14,33 @@ import java.util.Calendar
 )
 data class Task(
     @ColumnInfo(defaultValue = "Default")
-    val category: String = "Default",
-    val title: String,
+    var category: String = "Default",
+    var title: String,
+    var isComplete: Boolean = false,
     @PrimaryKey(autoGenerate = true)
     val id: Long = 0,    // 作为主键插入时，若是0，则数据库为其生成一个Id，并在insert方法中作为返回值
-    val content: String = "",
+    var content: String = "",
     val created: Calendar = Calendar.getInstance(),
     @IntRange(from = 1, to = 100)
     val scored: Int = 1, //  奖励几朵小红花
-) {
+) : Comparable<Task> {
     override fun toString(): String {
         return "Task(category=$category, title=$title, created=${
             DateFormat.getInstance().format(created.time)
         } )"
     }
+
+    override fun compareTo(other: Task): Int {
+        return if (isComplete && !other.isComplete) {
+            1
+        } else if (!isComplete && other.isComplete) {
+            -1
+        } else {
+            title.compareTo(other.title)
+        }
+    }
+}
+
+fun Calendar.toString():String {
+    return DateFormat.getInstance().format(time)
 }

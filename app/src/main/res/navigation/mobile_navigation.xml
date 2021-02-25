@@ -2,14 +2,24 @@
 <navigation xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/mobile_navigation"
-    app:startDestination="@+id/nav_home">
+    android:id="@+id/graph_main"
+    app:startDestination="@id/nav_home">
 
     <fragment
         android:id="@+id/nav_home"
         android:name="com.wjploop.life.ui.home.HomeFragment"
         android:label="@string/title_home"
-        tools:layout="@layout/fragment_home" />
+        tools:layout="@layout/fragment_home">
+        <action
+            android:id="@+id/toEdit"
+            app:destination="@id/graph_edit_task">
+            <argument
+                android:name="taskId"
+                android:defaultValue="0L"
+                app:argType="long"
+                app:nullable="false" />
+        </action>
+    </fragment>
 
     <fragment
         android:id="@+id/nav_dashboard"
@@ -22,4 +32,35 @@
         android:name="com.wjploop.life.ui.notifications.NotificationsFragment"
         android:label="@string/title_notifications"
         tools:layout="@layout/fragment_notifications" />
+
+    <navigation
+        android:id="@+id/graph_edit_task"
+        app:startDestination="@id/nav_edit_task">
+
+        <fragment
+            android:id="@+id/nav_edit_task"
+            android:name="com.wjploop.life.ui.edit.EditTaskFragment"
+            android:label="@string/edit_task"
+            tools:layout="@layout/fragment_edit_task">
+            <argument
+                android:name="taskId"
+                app:argType="long" />
+            <action
+                android:id="@+id/toCategory"
+                app:destination="@id/nav_select_category"
+                app:enterAnim="@anim/slide_in_bottom"
+                app:popExitAnim="@anim/slide_out_bottom" />
+        </fragment>
+
+        <fragment
+            android:id="@+id/nav_select_category"
+            android:name="com.wjploop.life.ui.category.CategoryListBottomFragment"
+            android:label="@string/select_category"
+            tools:layout="@layout/fragment_category">
+            <argument
+                android:name="taskId"
+                app:argType="long" />
+        </fragment>
+    </navigation>
+
 </navigation>
