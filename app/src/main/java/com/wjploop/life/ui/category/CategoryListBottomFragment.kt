@@ -49,7 +49,9 @@ class CategoryListBottomFragment : BottomSheetDialogFragment() {
                             lifecycleScope.launch {
                                 editTaskViewModel.repo.updateTask(editTaskViewModel.task.value?.copy(category = category.name)!!)
                             }
-                            findNavController().popBackStack()
+                            findNavController().run {
+                                popBackStack()
+                            }
                         }
                     }
                 }.let {

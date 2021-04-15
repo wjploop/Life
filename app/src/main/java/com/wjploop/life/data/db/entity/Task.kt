@@ -1,5 +1,6 @@
 package com.wjploop.life.data.db.entity
 
+import android.util.ArraySet
 import androidx.annotation.IntRange
 import androidx.room.*
 import java.text.DateFormat
@@ -23,11 +24,17 @@ data class Task(
     val created: Calendar = Calendar.getInstance(),
     @IntRange(from = 1, to = 100)
     val scored: Int = 1, //  奖励几朵小红花
+    val imageUrls: Set<ImageEntity> = LinkedHashSet()
 ) : Comparable<Task> {
+
     override fun toString(): String {
         return "Task(category=$category, title=$title, created=${
             DateFormat.getInstance().format(created.time)
-        } )"
+        }, imageUrls=$imageUrls )"
+    }
+
+    override fun equals(other: Any?): Boolean {
+        return super.equals(other) && imageUrls == (other as? Task)?.imageUrls
     }
 
     override fun compareTo(other: Task): Int {

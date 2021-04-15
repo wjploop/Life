@@ -1,5 +1,6 @@
 package com.wjploop.life
 
+import android.Manifest
 import android.os.Bundle
 import android.view.MenuItem
 import com.google.android.material.bottomnavigation.BottomNavigationView
@@ -8,6 +9,8 @@ import androidx.navigation.findNavController
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
+import java.security.Permission
+import java.security.Permissions
 
 class MainActivity : AppCompatActivity() {
 
@@ -24,8 +27,7 @@ class MainActivity : AppCompatActivity() {
         )
         setupActionBarWithNavController(navController, appBarConfiguration)
         navView.setupWithNavController(navController)
-
-
+        requestPermissions(arrayOf(Manifest.permission.READ_EXTERNAL_STORAGE,Manifest.permission.WRITE_EXTERNAL_STORAGE), 99)
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {

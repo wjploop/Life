@@ -61,6 +61,13 @@
                 android:name="taskId"
                 app:argType="long" />
         </fragment>
+
+        <fragment
+            android:name="com.wjploop.life.widget.BottomSelectPhotoFragment"
+            android:id="@+id/nav_select_photo"
+            android:label="@string/select_photo"
+            tools:layout="@layout/frag_bottom_select_phonto" />
+
     </navigation>
 
 </navigation>
