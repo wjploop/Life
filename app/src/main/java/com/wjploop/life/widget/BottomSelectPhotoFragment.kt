@@ -9,12 +9,17 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
+import androidx.core.os.bundleOf
+import androidx.core.view.ViewCompat
+import androidx.core.view.doOnPreDraw
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.MutableLiveData
 import androidx.loader.app.LoaderManager
 import androidx.loader.content.CursorLoader
 import androidx.loader.content.Loader
-import androidx.navigation.findNavController
+import androidx.navigation.*
+import androidx.navigation.fragment.FragmentNavigatorExtras
+import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.GridLayoutManager
 import com.bumptech.glide.Glide
@@ -45,15 +50,38 @@ class BottomSelectPhotoFragment : Fragment(), LoaderManager.LoaderCallbacks<Curs
         LoaderManager.getInstance(this).initLoader(0, null, this)
     }
 
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        postponeEnterTransition()
+        (view.parent as? ViewGroup)?.doOnPreDraw {
+            startPostponedEnterTransition()
+        }
+    }
+
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         binding = FragBottomSelectPhontoBinding.inflate(inflater, container, false)
         binding.rvPhotos.apply {
             layoutManager = GridLayoutManager(context, 3)
             photoPickingAdapter.setOnItemClickListener(OnItemClickListener { adapter, view, position ->
                 val imageEntity = photoPickingAdapter.data[position]
+
+//                findNavController().run {
+//                    previousBackStackEntry?.savedStateHandle?.set(images_key, imageEntity)
+//                    navigate(0, null, navOptions {
+//                        launchSingleTop = true
+//                        popUpTo = R.id.nav_edit_task
+//                    }, FragmentNavigatorExtras(Pair(view, imageEntity.id)))
+//                }
                 findNavController().run {
-                    previousBackStackEntry?.savedStateHandle?.set(images_key, imageEntity)
-                    popBackStack()
+                    navigate(
+                        R.id.nav_photo_preview_x, bundleOf(Pair("image", imageEntity)), null,
+                        null,
+//                        FragmentNavigatorExtras(
+//                            Pair(
+//                                view, imageEntity.id
+//                            )
+//                        )
+                    )
                 }
             })
             adapter = photoPickingAdapter
@@ -95,7 +123,7 @@ class BottomSelectPhotoFragment : Fragment(), LoaderManager.LoaderCallbacks<Curs
         override fun convert(holder: BaseViewHolder, item: ImageEntity) {
 //            Log.d("wolf", item.path)
             val imageView = holder.getView<ImageView>(R.id.iv_image)
-
+//            ViewCompat.setTransitionName(imageView, item.id)
             Glide.with(context).load(File(item.path))
                 .transition(DrawableTransitionOptions.withCrossFade())
                 .centerCrop()

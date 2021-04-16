@@ -19,10 +19,10 @@ class Converters {
         Calendar.getInstance().apply { timeInMillis = timeValue }
 
     @TypeConverter
-    fun imageEntity2Str(imageEntity: Set<ImageEntity>):String = Json.encodeToString(imageEntity)
+    fun imageEntity2Str(imageEntity: List<ImageEntity>):String = Json.encodeToString(imageEntity)
 
     @TypeConverter
-    fun str2ImageEntity(imageStr:String):Set<ImageEntity> = Json.decodeFromString(imageStr)
+    fun str2ImageEntity(imageStr:String):List<ImageEntity> = Json.decodeFromString(imageStr)
 
 
 }

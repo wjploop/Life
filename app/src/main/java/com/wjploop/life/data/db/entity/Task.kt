@@ -24,7 +24,7 @@ data class Task(
     val created: Calendar = Calendar.getInstance(),
     @IntRange(from = 1, to = 100)
     val scored: Int = 1, //  奖励几朵小红花
-    val imageUrls: Set<ImageEntity> = LinkedHashSet()
+    val imageUrls: MutableList<ImageEntity> = arrayListOf()
 ) : Comparable<Task> {
 
     override fun toString(): String {
