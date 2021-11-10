@@ -34,7 +34,7 @@ class DashboardFragment : Fragment() {
             adapter = appAdapter
         }
 
-        lifecycleScope.launchWhenResumed {
+        lifecycleScope.launchWhenCreated {
             dashboardViewModel.startLoad()
         }
 

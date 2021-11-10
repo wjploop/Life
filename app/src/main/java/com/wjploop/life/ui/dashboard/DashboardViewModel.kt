@@ -38,7 +38,7 @@ class DashboardViewModel(val app: Application) : AndroidViewModel(app) {
                                 it.applicationInfo.loadLabel(app.packageManager),
                                 it.applicationInfo.loadIcon(app.packageManager),
                             ).let {
-                                delay(50)
+//                                delay(50)
 //                            Log.d("wolf","emit $it")
                                 val list = mutableListOf<AppItem>()
                                 apps.value?.let {
