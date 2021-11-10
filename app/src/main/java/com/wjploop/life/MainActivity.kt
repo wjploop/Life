@@ -28,6 +28,7 @@ class MainActivity : AppCompatActivity() {
         setupActionBarWithNavController(navController, appBarConfiguration)
         navView.setupWithNavController(navController)
         requestPermissions(arrayOf(Manifest.permission.READ_EXTERNAL_STORAGE,Manifest.permission.WRITE_EXTERNAL_STORAGE), 99)
+        requestPermissions(arrayOf(Manifest.permission.QUERY_ALL_PACKAGES), 98)
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {

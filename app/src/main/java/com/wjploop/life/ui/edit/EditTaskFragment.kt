@@ -29,7 +29,6 @@ import com.wjploop.life.R
 import com.wjploop.life.data.db.entity.ImageEntity
 import com.wjploop.life.data.db.entity.Task
 import com.wjploop.life.databinding.FragmentEditTaskBinding
-import com.wjploop.life.ui.navigation.PickPhotoNavOption
 import kotlinx.coroutines.launch
 import java.io.File
 
